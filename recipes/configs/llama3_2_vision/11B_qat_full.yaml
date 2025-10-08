@@ -5,7 +5,7 @@
 #   tune download meta-llama/Llama-3.2-11B-Vision-Instruct --output-dir /tmp/Llama-3.2-11B-Vision-Instruct --ignore-patterns "original/consolidated*"
 #
 # To launch on a single device, run the following command from root:
-#   tune run --nproc_per_node 4 full_finetune_distributed --config llama3_2_vision/11B_full
+#   tune run --nproc_per_node 4 full_finetune_distributed --config llama3_2_vision/11B_qat_full
 #
 # You can add specific overrides through the command line. For example
 # to override the checkpointer directory while launching training:
@@ -15,7 +15,7 @@
 # Single device full finetuning requires more memory optimizations. It's
 # best to use 11B_full_single_device.yaml for those cases.
 
-output_dir: /tmp/torchtune/llama3_2_vision_11B/full # /tmp may be deleted by your system. Change it to your preference.
+output_dir: /tmp/torchtune/llama3_2_vision_11B/qat_full # /tmp may be deleted by your system. Change it to your preference.
 
 # Model arguments
 model:
@@ -61,7 +61,7 @@ collate_fn: torchtune.data.padded_collate_tiled_images_and_mask
 
 # Validation
 # run_val_every_epoch: 1  # Run validation after every epoch
-run_val_every_n_steps: 20
+run_val_every_n_steps: 5
 dataset_val:
   _component_: torchtune.datasets.multimodal.vqa_dataset
   source: json
@@ -76,7 +76,9 @@ batch_size_val: ${batch_size}
 
 # Fine-tuning arguments
 epochs: 1
-max_steps_per_epoch: null
+max_steps_per_epoch: 10
+fake_quant_after_n_steps: 5
+memory_efficient_fsdp_wrap: False
 batch_size: 2
 gradient_accumulation_steps: 8  # Use to increase effective batch size
 optimizer:
@@ -105,6 +107,12 @@ metric_logger:
 log_every_n_steps: 1
 log_peak_memory_stats: True
 log_level: INFO  # DEBUG, WARN, etc.
+
+
+# QAT arguments
+quantizer:
+  _component_: torchtune.training.quantization.Int8DynActInt4WeightQATQuantizer
+  groupsize: 256
 
 
 # Profiler (disabled)
