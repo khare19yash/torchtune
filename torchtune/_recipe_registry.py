@@ -647,6 +647,10 @@ _ALL_RECIPES = [
             Config(name="llama3/8B_qat_full", file_path="llama3/8B_qat_full.yaml"),
             Config(name="llama3_1/8B_qat_full", file_path="llama3_1/8B_qat_full.yaml"),
             Config(name="llama3_2/3B_qat_full", file_path="llama3_2/3B_qat_full.yaml"),
+            Config(
+                name="llama3_2_vision/11B_qat_full",
+                file_path="llama3_2_vision/11B_qat_full.yaml",
+            ),
         ],
         supports_distributed=True,
     ),
@@ -658,6 +662,10 @@ _ALL_RECIPES = [
             Config(name="llama3_1/8B_qat_lora", file_path="llama3_1/8B_qat_lora.yaml"),
             Config(name="llama3_2/1B_qat_lora", file_path="llama3_2/1B_qat_lora.yaml"),
             Config(name="llama3_2/3B_qat_lora", file_path="llama3_2/3B_qat_lora.yaml"),
+            Config(
+                name="llama3_2_vision/11B_qat_lora",
+                file_path="llama3_2_vision/11B_qat_lora.yaml",
+            ),
         ],
         supports_distributed=True,
     ),
