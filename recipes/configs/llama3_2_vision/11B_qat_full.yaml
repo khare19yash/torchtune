@@ -44,42 +44,64 @@ checkpointer:
   model_type: LLAMA3_VISION
 resume_from_checkpoint: False
 
+
+
 # Dataset
 dataset:
-  _component_: torchtune.datasets.multimodal.vqa_dataset
+  _component_: torchtune.datasets.custom_sft_dataset
   source: json
-  data_files:
-    train: /home/yashkhare/workspace/medft_data/mimic/vqa_train.json
-  split: train
-  column_map:
-    input: instruction
-    output: output
-    image: image
+  dataset_path: /home/yashkhare/workspace/data/output/all_conversations.json
 seed: null
 shuffle: True
 collate_fn: torchtune.data.padded_collate_tiled_images_and_mask
 
+
 # Validation
-# run_val_every_epoch: 1  # Run validation after every epoch
-run_val_every_n_steps: 5
+run_val_every_n_steps: 10
 dataset_val:
-  _component_: torchtune.datasets.multimodal.vqa_dataset
+  _component_: torchtune.datasets.custom_sft_dataset
   source: json
-  data_files:
-    val: /home/yashkhare/workspace/medft_data/mimic/vqa_validation.json
-  split: val
-  column_map:
-    input: instruction
-    output: output
-    image: image
+  dataset_path: /home/yashkhare/workspace/data/output/val.json
 batch_size_val: ${batch_size}
+
+
+# # Dataset
+# dataset:
+#   _component_: torchtune.datasets.multimodal.vqa_dataset
+#   source: json
+#   data_files:
+#     train: /home/yashkhare/workspace/medft_data/mimic/vqa_train.json
+#   split: train
+#   column_map:
+#     input: instruction
+#     output: output
+#     image: image
+# seed: null
+# shuffle: True
+# collate_fn: torchtune.data.padded_collate_tiled_images_and_mask
+
+# # Validation
+# # run_val_every_epoch: 1  # Run validation after every epoch
+# run_val_every_n_steps: 5
+# dataset_val:
+#   _component_: torchtune.datasets.multimodal.vqa_dataset
+#   source: json
+#   data_files:
+#     val: /home/yashkhare/workspace/medft_data/mimic/vqa_validation.json
+#   split: val
+#   column_map:
+#     input: instruction
+#     output: output
+#     image: image
+# batch_size_val: ${batch_size}
 
 # Fine-tuning arguments
 epochs: 1
-max_steps_per_epoch: 10
+save_every_n_steps: 10
+max_steps_per_epoch: 100
 fake_quant_after_n_steps: 5
 memory_efficient_fsdp_wrap: False
-batch_size: 2
+batch_size: 4
 gradient_accumulation_steps: 8  # Use to increase effective batch size
 optimizer:
   _component_: torch.optim.AdamW

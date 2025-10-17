@@ -23,6 +23,7 @@ from torchtune.datasets._text_completion import (
     TextCompletionDataset,
 )
 from torchtune.datasets._wikitext import wikitext_dataset
+from torchtune.datasets.custom_sft_dataset import custom_sft_dataset
 
 __all__ = [
     "alpaca_dataset",
@@ -44,4 +45,5 @@ __all__ = [
     "SFTDataset",
     "hh_rlhf_helpful_dataset",
     "multimodal",
+    "custom_sft_dataset",
 ]
